@@ -8,9 +8,9 @@
 * @license     GPL-2.0+
 *
 * @wordpress-plugin
-* Plugin Name: Relative Marketing Newsletter
-* Plugin URI:  https://relativemarketing.co.uk/plugin-name
-* Description: Manages the signup of newsletters.
+* Plugin Name: Newsletter Signup form for Sharpspring
+* Plugin URI:  https://relativemarketing.co.uk/
+* Description: Manages the signup of newsletters by adding leads to a specific sharpspring campaign.
 * Version:     1.0.0
 * Author:      Relative Marketing
 * Author URI:  https://relativemarketing.co.uk
