@@ -86,7 +86,7 @@ function handle_newsletter_subscribe( $params ) {
 	// If we have sharsprings(ss) tracking cookie then make sure it is attached
 	// to the lead when the lead is created
 	$tracking_id = array_key_exists( '__ss_tk', $_COOKIE ) ? $_COOKIE['__ss_tk'] : '';
-	$campaign_id = get_options( 'ss_campaign_id' );
+	$campaign_id = get_option( 'ss_campaign_id' );
 
 	// Format the params according to ss api requirements
 	$paramData = [ 
