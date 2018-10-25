@@ -1,0 +1,23 @@
+{
+	"name": "relative-newsletter",
+	"version": "1.0.0",
+	"main": "block.js",
+	"devDependencies": {
+		"babel-core": "^6.25.0",
+		"babel-loader": "^7.1.1",
+		"babel-plugin-transform-react-jsx": "^6.24.1",
+		"babel-preset-env": "^1.6.0",
+		"cross-env": "^5.0.1",
+		"webpack": "^3.1.0"
+	},
+	"scripts": {
+		"build": "cross-env BABEL_ENV=default NODE_ENV=production webpack",
+		"dev": "cross-env BABEL_ENV=default webpack --watch"
+	},
+	"dependencies": {
+		"axios": "^0.18.0",
+		"js-cookie": "^2.2.0",
+		"react": "^16.5.2",
+		"react-dom": "^16.5.2"
+	}
+}

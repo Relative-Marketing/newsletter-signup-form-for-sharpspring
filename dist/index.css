@@ -1,0 +1,113 @@
+#relative-newsletter-signup {
+	position: fixed;
+	background: rgba(255, 255, 255, 0.68);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right:0;
+	text-align:center;
+	z-index:2001;
+}
+
+.relative-newsletter-modal {
+	display:flex;
+	max-width:750px;
+	border-radius: 10px 0 0 10px;
+    box-shadow: 4px 9px 20px -4px rgba(0,0,0,0.3);
+	overflow: hidden;
+	
+}
+
+.relative-newsletter-modal__section {
+	background: #ffffff;
+	position: relative;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.relative-newsletter-modal__section:first-of-type {
+	width: 40%;
+}
+
+.relative-newsletter-modal__section:last-of-type {
+	width: 60%;
+	padding: 0px 40px;
+	padding-bottom: 20px;
+}
+
+.relative-newsletter-modal__form,
+.relative-newsletter-modal__label {
+	display:flex;
+	flex-direction: column;
+}
+
+.relative-newsletter-modal__input,
+.relative-newsletter-modal__btn {
+	padding: 10px;
+}
+
+.relative-newsletter-modal__btn,
+.relative-newsletter-modal__btn--close:hover {
+	background: #263994;
+	color: #ffffff;
+}
+
+.relative-newsletter-modal__btn:hover,
+.relative-newsletter-modal__btn--close,
+.relative-newsletter-modal__label-text,
+.relative-newsletter-modal__heading.h3,
+h3.relative-newsletter-modal__heading {
+	background: #ffffff;
+	color: #263994;
+}
+
+.relative-newsletter-modal__btn {
+	border: 1px solid #263994;
+	text-transform: uppercase;
+	letter-spacing: 0.1rem;
+	cursor: pointer;
+
+	transition: 0.5s all ease-in-out;
+}
+
+.relative-newsletter-modal__btn--close {
+	position: absolute;
+	top:0;
+    right: 0;
+    padding: 5px;
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+	line-height: 20px;
+}
+
+.relative-newsletter__copy h2 {
+	margin-top: 1.5rem !important;
+}
+
+.relative-newsletter-modal__label-text {
+	font-weight: 900;
+	font-size: 1.2rem;
+	text-align: left;
+}
+
+@media screen and (max-width: 750px) {
+	.relative-newsletter-modal {
+		margin:10px;
+	}
+
+	.relative-newsletter-modal__section:first-of-type {
+		display: none;
+	}
+
+	.relative-newsletter-modal__section:last-of-type {
+		width: 100%;
+		min-height: 500px;
+		padding-top: 10px;
+		padding-bottom: 10px; 
+	}
+}
