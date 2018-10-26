@@ -71,9 +71,9 @@ This list needs to be expanded but some initial thoughts are as follows
 
 [] - Improvements to the options page 
 
-[]		- Improve image option
+[]	-- Improve image option
 
-[] 		- Give users a way to retrive campaign id in options page
+[] 	-- Give users a way to retrive campaign id in options page
 
 [] - When a user is already a lead but not assigned to the target campaign add them
 
