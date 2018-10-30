@@ -26,7 +26,12 @@ class Form extends Component {
 
 		// Attempt to add the user to sharpspring via the relative newsetter endpoint
 		Axios
-			.get(`/wp-json/relativemarketing/v1/newsletter/email/${this.state.email}/name/${this.state.name}`)
+			.post(`/wp-json/relativemarketing/sharpspring/v1/addLead`,
+			{
+				email: this.state.email,
+				name: this.state.name,
+				campaignId: this.props.campaignId,
+			})
 			.then(({data}) => {
 				// If the sharpspring returned an error and the error they sent is not
 				// because they are already signed up (code 301)
@@ -34,7 +39,7 @@ class Form extends Component {
 
 				this.props.didSubmit(isError);
 			})
-			.catch(() => {
+			.catch((err) => {
 				this.props.didSubmit(true);
 			});
 	}

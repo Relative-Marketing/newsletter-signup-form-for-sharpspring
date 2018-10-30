@@ -58,6 +58,7 @@ class NewsletterModal extends Component {
 				succes: {},
 				error: {}
 			},
+			campaignId: '',
 		}
 	}
 
@@ -118,6 +119,7 @@ class NewsletterModal extends Component {
 						isComplete={this.state.completed}
 						toggleComplete={this.toggleComplete}
 						notice={this.notice}
+						campaignId={this.state.campaignId}
 					/>
 				</Section>
 			</div>
