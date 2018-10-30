@@ -58,6 +58,7 @@ function load_newsletter_scripts() {
 }
 
 function handle_get_data() {
+	$campaign = get_option( 'relative_newsletter_sharpspring_campaign_id' );
 	$copy = [
 		'heading'   => get_option( 'relative_newsletter_heading' ),
 		'paragraph' => get_option( 'relative_newsletter_paragraph' ),
@@ -85,7 +86,7 @@ function handle_get_data() {
 
 	$popup_delay = get_option( 'relative_newsletter_popup_delay' );
 
-	return rest_ensure_response(['img' => $images, 'notice' => $notices, 'popupDelay' => $popup_delay, 'copy' => $copy]);
+	return rest_ensure_response(['campaignId' => $campaign, 'img' => $images, 'notice' => $notices, 'popupDelay' => $popup_delay, 'copy' => $copy]);
 }
 
 /**
