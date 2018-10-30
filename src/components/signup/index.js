@@ -13,7 +13,7 @@ class SignUp extends Component {
 				heading: '',
 				message: '',
 				success: null,
-			}
+			},
 		}
 
 		this.displayNotice = this.displayNotice.bind(this);
@@ -45,7 +45,7 @@ class SignUp extends Component {
 	render() {
 		return (
 			<div className="relative-newsletter-modal__signup">
-				{this.props.isComplete ? this.getNotice() : <Form didSubmit={this.displayNotice}/>}
+				{this.props.isComplete ? this.getNotice() : <Form didSubmit={this.displayNotice} campaignId={this.props.campaignId}/>}
 			</div>
 		);
 	}

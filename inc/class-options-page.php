@@ -45,7 +45,7 @@ class Options_Page {
 		<div class="wrap">
 			<form action='options.php' method='post'>
 				<?php
-				settings_fields( 'section' );
+				settings_fields( 'relative-newsletter-section' );
 				?>
 				<h1>Relative Newsletter</h1>
 				<p>Please add the relevant information for the newsletter popup</p>
@@ -62,12 +62,11 @@ class Options_Page {
 	 * The field that accepts the GTM ID
 	 */
 	public function display_theme_panel_fields() {
-		add_settings_section( 'section', 'Newsletter settings', null, 'relative-newsletter-options' );
+		add_settings_section( 'relative-newsletter-section', 'Newsletter settings', null, 'relative-newsletter-options' );
 
 		$fields = [
-			['key' => 'ss_api_key', 'heading' => 'Your sharpspring api key', 'callback' => 'display_api_input'],
-			['key' => 'ss_secret_key', 'heading' => 'Your sharpspring secret key', 'callback' => 'display_secret_input'],
-			['key' => 'ss_campaign_id', 'heading' => 'Your sharpspring campaign id', 'callback' => 'display_campaign_id_input'],
+			['key' => 'relative_newsletter_sharpspring_campaign_id', 'heading' => 'Sharpspring Campaign Id' , 'callback' => 'display_campaign_id_input'],
+			['key' => 'relative_newsletter_heading', 'heading' => 'Newsletter Heading' , 'callback' => 'display_heading_input'],
 			['key' => 'relative_newsletter_heading', 'heading' => 'Newsletter Heading' , 'callback' => 'display_heading_input'],
 			['key' => 'relative_newsletter_paragraph', 'heading' => 'Newsletter paragraph' , 'callback' => 'display_paragraph_input'],
 			['key' => 'relative_newsletter_error_heading', 'heading' => 'Error Heading' , 'callback' => 'display_error_heading_input'],
@@ -83,8 +82,8 @@ class Options_Page {
 		];
 		
 		foreach ($fields as $field) {
-			add_settings_field( $field['key'], $field['heading'], [ $this, $field['callback'] ], 'relative-newsletter-options', 'section' );
-			register_setting( 'section', $field['key'] );
+			add_settings_field( $field['key'], $field['heading'], [ $this, $field['callback'] ], 'relative-newsletter-options', 'relative-newsletter-section' );
+			register_setting( 'relative-newsletter-section', $field['key'] );
 		}
 
 	}
@@ -94,7 +93,8 @@ class Options_Page {
 	}
 
 	public function display_campaign_id_input() {
-		$this->add_input( 'ss_campaign_id' );
+		$this->add_input( 'relative_newsletter_sharpspring_campaign_id' );
+		echo '<br/><span>Note: This is the campaign the user will be added to when they are signed up</span>';
 	}
 
 	public function display_popup_delay_input() {
