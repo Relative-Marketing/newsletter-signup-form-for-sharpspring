@@ -20,6 +20,26 @@ namespace RelativeMarketing\Newsletter;
 
 defined('ABSPATH') or die();
 
+include 'inc/helpers.php';
+use RelativeMarketing\Newsletter\Helpers as Helpers;
+
+add_action( 'admin_init', __NAMESPACE__ . '\\check_sharpspring_endpoints_plugin_active' );
+
+function check_sharpspring_endpoints_plugin_active() {
+	if( Helpers\has_sharpspring_endpoints_plugin() ) {
+		return;
+	}
+
+	add_action( 'admin_notices', __NAMESPACE__ . '\\add_missing_sharpspring_dependency_error' );
+}
+
+function add_missing_sharpspring_dependency_error() {
+	$class   = 'notice notice-error';
+	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring please install or activate it</a>', 'relative-newsletter' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
+}
+
 add_action( 'rest_api_init', __NAMESPACE__ . '\\init_endpoint' );
 
 function init_endpoint() {
@@ -52,7 +72,9 @@ function output_newsletter_holder() {
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\load_newsletter_scripts' );
 
 function load_newsletter_scripts() {
-	if ( ! is_single() ) return;
+	if ( ! is_single() || ! Helpers\has_sharpspring_endpoints_plugin() )
+		return;
+
 	wp_enqueue_script( 'relative-newletter', plugins_url( 'dist/index.js', __FILE__ ), [], filemtime( plugin_dir_path( __FILE__ ) . 'dist/index.js' ), true );
 	wp_enqueue_style( 'relative-newsletter', plugins_url( 'dist/index.css', __FILE__ ), false, filemtime( plugin_dir_path( __FILE__ ) . 'dist/index.css' ) );
 }
