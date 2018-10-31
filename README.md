@@ -2,15 +2,12 @@
 
 A simple WordPress plugin built for Sharpspring users. This plugin adds a popup to your single blog posts that when filled in will add the user as a lead in the Sharpspring system under the campaign of your choosing.
 
-## The plugin adds two endpoints:
-
-**/relativemarketing/v1/newsletter/name/$name/email/$email**
-
-Accessing the above is what adds the user to the Sharpspring system. Note $name and $email are the name and email you would like to add.
+## Endpoint
 
 **/relativemarketing/v1/newsletter/data**
 
 Will return user defined options that are required for the display of the newsletter popup
+
 
 ## Frontend
 React along with some minimal css is used on the frontend to display the popup.
@@ -19,14 +16,11 @@ React along with some minimal css is used on the frontend to display the popup.
 
 ## Options
 
-**Sharpspring API key** - Your Sharpspring API ID
+Below are the options for the plugin which can be found under Settings > Relative Newsletter
 
-**Sharpspring Secret key** - Your Sharpspring Secret key
+### Sharpspring Options
 
-**Sharpspring Campaign** - The campaign the user should be added to
-
-See the [Sharspring API documentation](https://help.sharpspring.com/hc/en-us/articles/115001069228-Open-API-Overview) for details about where to find this above info.
-
+**Campaign Id** The campaign to add the user to
 
 ### Message options
 
@@ -75,5 +69,6 @@ This list needs to be expanded but some initial thoughts are as follows
 
 [] 	-- Give users a way to retrive campaign id in options page
 
-[] - When a user is already a lead but not assigned to the target campaign add them
+--[] - When a user is already a lead but not assigned to the target campaign add them-- A user should only be added to a campaign once.
+
 
