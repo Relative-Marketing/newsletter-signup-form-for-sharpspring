@@ -4,7 +4,7 @@
 *
 * @package     RelativeMarketing\Newsletter
 * @author      Daniel Gregory
-* @copyright   2016 Relative Marketing
+* @copyright   2018 Relative Marketing
 * @license     GPL-2.0+
 *
 * @wordpress-plugin
