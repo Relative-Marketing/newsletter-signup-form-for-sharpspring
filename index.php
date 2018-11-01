@@ -35,7 +35,7 @@ function check_sharpspring_endpoints_plugin_active() {
 
 function add_missing_sharpspring_dependency_error() {
 	$class   = 'notice notice-error';
-	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring please install or activate it</a>', 'relative-newsletter' );
+	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring</a> please install or activate it', 'relative-newsletter' );
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
 }
