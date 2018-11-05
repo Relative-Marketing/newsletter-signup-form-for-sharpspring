@@ -23,6 +23,15 @@ defined('ABSPATH') or die();
 include 'inc/helpers.php';
 use RelativeMarketing\Newsletter\Helpers as Helpers;
 
+/**
+ * Add the options page to allow users to setup the plugin
+ */
+include plugin_dir_path( __FILE__ ) . 'inc/class-options-page.php';
+include plugin_dir_path( __FILE__ ) . 'inc/class-form-generator.php';
+
+$settings_page = new \RelativeMarketing\Options\Page;
+$settings_page->render();
+
 add_action( 'admin_init', __NAMESPACE__ . '\\check_sharpspring_endpoints_plugin_active' );
 
 function check_sharpspring_endpoints_plugin_active() {
@@ -110,9 +119,3 @@ function handle_get_data() {
 
 	return rest_ensure_response(['campaignId' => $campaign, 'img' => $images, 'notice' => $notices, 'popupDelay' => $popup_delay, 'copy' => $copy]);
 }
-
-/**
- * Add the options page to allow users to setup the plugin
- */
-require plugin_dir_path( __FILE__ ) . 'inc/class-options-page.php';
-Options_Page::get_instance();

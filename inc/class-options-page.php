@@ -5,9 +5,9 @@
  * Creates an options page that allows the user to enter their sharpsprings secret and other info
  */
 
-namespace RelativeMarketing\Newsletter;
+namespace RelativeMarketing\Options;
 
-class Options_Page {
+class Page {
 	/**
 	 * Static property to hold our singleton instance
 	 *
@@ -15,14 +15,43 @@ class Options_Page {
 	 */
 	static protected $instance = false;
 
+	protected $sections = [
+		'relative-newsletter-section' => [
+			'title'  => 'Newsletter settings',
+			'fields' => [
+				'relative_newsletter_sharpspring_campaign_id' => ['heading' => 'Sharpspring Campaign Id', 'desc' => 'Note: This is the campaign the user will be added to when they are signed up', 'type' => 'input'],
+				'relative_newsletter_heading'                 => ['heading' => 'Newsletter Heading', 'type' => 'input'],
+				'relative_newsletter_heading'                 => ['heading' => 'Newsletter Heading', 'type' => 'input'],
+				'relative_newsletter_paragraph'               => ['heading' => 'Newsletter paragraph', 'type' => 'textarea'],
+				'relative_newsletter_error_heading'           => ['heading' => 'Error Heading', 'type' => 'input'],
+				'relative_newsletter_error_message'           => ['heading' => 'Error message', 'type' => 'input'],
+				'relative_newsletter_success_heading'         => ['heading' => 'Success Heading', 'type' => 'input'],
+				'relative_newsletter_success_message'         => ['heading' => 'Success message', 'type' => 'input'],
+				'relative_newsletter_img_x1'                  => ['heading' => 'Image @1x resolution', 'type' => 'input'],
+				'relative_newsletter_img_x2'                  => ['heading' => 'Image @2x resolution', 'type' => 'input'],
+				'relative_newsletter_img_x3'                  => ['heading' => 'Image @3x resolution', 'type' => 'input'],
+				'relative_newsletter_img_alt'                 => ['heading' => 'Image alt', 'type' => 'input'],
+				'relative_newsletter_popup_delay'             => ['heading' => 'Popup Delay', 'type' => 'input'],
+			],
+		]
+	];
+
+	protected $page_arguments = [
+		'parent' => 'options-general.php',
+		'page_title' => 'Relative newsletter',
+		'page_description' => 'Please add the relevant information for the newsletter popup',
+		'menu_title' => 'Relative newsletter',
+		'menu_slug' => 'relative-newsletter',
+		'capability' => 'manage_options',
+	];
 	/**
 	 * constructor.
 	 */
-	private function __construct() {
-		$this->start();
+	public function __construct() {
+
 	}
 
-	protected function start() {
+	public function render() {
 		add_action( 'admin_menu', [ $this, 'add_admin_menu_item' ] );
 		add_action( 'admin_init', [ $this, 'display_theme_panel_fields' ] );
 	}
@@ -31,7 +60,7 @@ class Options_Page {
 	 * Adds a sub menu page 
 	 */
 	public function add_admin_menu_item() {
-		add_submenu_page( 'options-general.php', 'Relative newsletter', 'Relative newsletter', 'manage_options', 'relative-newsletter', [ $this, 'option_page_callback' ] );
+		add_submenu_page( $this->get_parent_page(), $this->get_page_title(), $this->get_menu_title(), $this->get_required_capability(), $this->get_menu_slug(), [ $this, 'option_page_callback' ] );
 	}
 
 	/**
@@ -43,14 +72,17 @@ class Options_Page {
 		}
 		?>
 		<div class="wrap">
+			<div class="page-information">
+				<h1><?php echo $this->get_page_title(); ?></h1>
+				<p><?php echo $this->get_page_description(); ?></p>
+			</div>
 			<form action='options.php' method='post'>
 				<?php
 				settings_fields( 'relative-newsletter-section' );
-				?>
-				<h1>Relative Newsletter</h1>
-				<p>Please add the relevant information for the newsletter popup</p>
-				<?php
-				do_settings_sections( 'relative-newsletter-options' );
+				/**
+				 * Do all the sections for the current page
+				 */
+				do_settings_sections( $this->get_menu_slug() );
 				submit_button();
 				?>
 			</form>
@@ -62,95 +94,41 @@ class Options_Page {
 	 * The field that accepts the GTM ID
 	 */
 	public function display_theme_panel_fields() {
-		add_settings_section( 'relative-newsletter-section', 'Newsletter settings', null, 'relative-newsletter-options' );
+		$page_id = $this->get_menu_slug();
 
-		$fields = [
-			['key' => 'relative_newsletter_sharpspring_campaign_id', 'heading' => 'Sharpspring Campaign Id' , 'callback' => 'display_campaign_id_input'],
-			['key' => 'relative_newsletter_heading', 'heading' => 'Newsletter Heading' , 'callback' => 'display_heading_input'],
-			['key' => 'relative_newsletter_heading', 'heading' => 'Newsletter Heading' , 'callback' => 'display_heading_input'],
-			['key' => 'relative_newsletter_paragraph', 'heading' => 'Newsletter paragraph' , 'callback' => 'display_paragraph_input'],
-			['key' => 'relative_newsletter_error_heading', 'heading' => 'Error Heading' , 'callback' => 'display_error_heading_input'],
-			['key' => 'relative_newsletter_error_message', 'heading' => 'Error message' , 'callback' => 'display_error_message_input'],
-			['key' => 'relative_newsletter_success_heading', 'heading' => 'Success Heading' , 'callback' => 'display_success_heading_input'],
-			['key' => 'relative_newsletter_success_message', 'heading' => 'Success message' , 'callback' => 'display_success_message_input'],
-			['key' => 'relative_newsletter_img_x1', 'heading' => 'Image @1x resolution' , 'callback' => 'display_img_1x_input'],
-			['key' => 'relative_newsletter_img_x2', 'heading' => 'Image @2x resolution' , 'callback' => 'display_img_2x_input'],
-			['key' => 'relative_newsletter_img_x3', 'heading' => 'Image @3x resolution' , 'callback' => 'display_img_3x_input'],
-			['key' => 'relative_newsletter_img_alt', 'heading' => 'Image alt' , 'callback' => 'display_img_alt_input'],
-			['key' => 'relative_newsletter_popup_delay', 'heading' => 'Popup Delay' , 'callback' => 'display_popup_delay_input'],
+		foreach ($this->sections as $section_id => $section) {
+			add_settings_section( $section_id, $section['title'], null, $page_id );
 
-		];
-		
-		foreach ($fields as $field) {
-			add_settings_field( $field['key'], $field['heading'], [ $this, $field['callback'] ], 'relative-newsletter-options', 'relative-newsletter-section' );
-			register_setting( 'relative-newsletter-section', $field['key'] );
+			foreach ( $section['fields'] as $option_id => $field ) {
+				$callback = 'add_option__' . $field['type'] . '__' . $option_id;
+
+				/**
+				 * Add a new field specifying the options id, it's heading, how it should be output on the page, the
+				 * section it belongs to.
+				 */
+				add_settings_field( $option_id, $field['heading'], [ $this, 'add_option' ], $page_id, $section_id, [$option_id, $field['type'], $section_id] );
+
+				/**
+				 * Then actually add that setting to the current section
+				 */
+				register_setting( $section_id, $option_id );
+			}
 		}
-
 	}
 
-	public function add_input( $option ) {
-		echo sprintf( '<input name="%s" id="%1$s" value="%2$s" />', $option, sanitize_text_field( get_option( $option ) ) );
-	}
+	public function add_option( $option, $type = '' ) {
+		$option_id = $option[0];
+		$field_type = $option[1];
+		$section = $option[2];
 
-	public function display_campaign_id_input() {
-		$this->add_input( 'relative_newsletter_sharpspring_campaign_id' );
-		echo '<br/><span>Note: This is the campaign the user will be added to when they are signed up</span>';
-	}
+		$option_data = $this->sections[$section]['fields'][ $option_id ];
 
-	public function display_popup_delay_input() {
-		$this->add_input( 'relative_newsletter_popup_delay' );
-	}
+		echo Form\Generate::field( $option_id, $field_type, get_option( $option_id ) );
 
-	public function display_img_alt_input() {
-		$this->add_input( 'relative_newsletter_img_alt' );
-	}
-
-	public function display_img_1x_input() {
-		$this->add_input( 'relative_newsletter_img_x1' );
-	}
-	public function display_img_2x_input() {
-		$this->add_input( 'relative_newsletter_img_x2' );
-	}
-	public function display_img_3x_input() {
-		$this->add_input( 'relative_newsletter_img_x3' );
-	}
-
-	public function display_success_message_input() {
-		$this->add_input( 'relative_newsletter_success_message' );
-	}
-	
-	public function display_success_heading_input() {
-		$this->add_input( 'relative_newsletter_success_heading' );
-	}
-	
-	public function display_error_message_input() {
-		$this->add_input( 'relative_newsletter_error_message' );
-	}
-	
-	public function display_error_heading_input() {
-		$this->add_input( 'relative_newsletter_error_heading' );
-	}
-
-	public function display_paragraph_input() {
-		$this->add_input( 'relative_newsletter_paragraph' );
-	}
-
-	public function display_heading_input() {
-		$this->add_input( 'relative_newsletter_heading' );
-	}
-
-	/**
-	 * The form input for the secret key
-	 */
-	public function display_secret_input() {
-		$this->add_input( 'ss_secret_key' );
-	}
-
-	/**
-	 * The form input
-	 */
-	public function display_api_input() {
-		$this->add_input( 'ss_api_key' );
+		// Check to see if a description has been added and if it has output that description
+		if ( array_key_exists( 'desc', $option_data ) ) {
+			echo '<br/><span>' . sanitize_text_field( $option_data['desc'] ) . '</span>';
+		}
 	}
 
 	/**
@@ -164,5 +142,45 @@ class Options_Page {
 			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * Getters and Setters
+	 */
+
+	/**
+	 * Will return the value of given argument for the page.
+	 * 
+	 * Although this may seem redundant as the methods that use this method could
+	 * access the page_arguments property directly I may want to change how the page
+	 * arguments are stored in the future. If the way the page arguments are accessed
+	 * changes I will just have to update this one method 👍
+	 */
+	public function get_page_argument( string $arg ) {
+		return $this->page_arguments[ $arg ];
+	}
+
+	public function get_parent_page() {
+		return $this->get_page_argument( 'parent' );
+	}
+	
+	public function get_page_title() {
+		return $this->get_page_argument( 'page_title' );
+	}
+
+	public function get_page_description() {
+		return $this->get_page_argument( 'page_description' );
+	}
+
+	public function get_menu_title() {
+		return $this->get_page_argument( 'menu_title' );
+	}
+	
+	public function get_menu_slug() {
+		return $this->get_page_argument( 'menu_slug' );
+	}
+	
+	public function get_required_capability() {
+		return $this->get_page_argument( 'capability' );
 	}
 }
