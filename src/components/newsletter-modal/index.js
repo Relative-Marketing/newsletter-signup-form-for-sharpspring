@@ -69,7 +69,7 @@ class NewsletterModal extends Component {
 		if(!Cookies.get('relative-newsletter-modal') ) {
 			// Setup content needed for newsletter display
 			Axios
-				.get('/wp-json/relativemarketing/v1/newsletter/data')
+				.get('/wp-json/relativemarketing/newsletter/v1/data')
 				.then(({data}) => {
 						this.setState(() => (data));
 						setTimeout(() => {document.getElementById('relative-newsletter-signup').style.display = 'flex'}, this.state.popupDelay);

@@ -4,7 +4,7 @@
 *
 * @package     RelativeMarketing\Newsletter
 * @author      Daniel Gregory
-* @copyright   2016 Relative Marketing
+* @copyright   2018 Relative Marketing
 * @license     GPL-2.0+
 *
 * @wordpress-plugin
@@ -23,6 +23,82 @@ defined('ABSPATH') or die();
 include 'inc/helpers.php';
 use RelativeMarketing\Newsletter\Helpers as Helpers;
 
+/**
+ * Add the options page to allow users to setup the plugin
+ */
+// include plugin_dir_path( __FILE__ ) . 'inc/class-options-page.php';
+// include plugin_dir_path( __FILE__ ) . 'inc/class-form-generator.php';
+
+
+add_action( 'plugins_loaded', __NAMESPACE__ .'\\register_settings' );
+
+function register_settings() {
+	/**
+	 * Check to make sure that relative options plugin is what provides the 
+	 * settings page for this plugin. Make sure it is available before we
+	 * try to use it.
+	 */
+	if ( ! class_exists( '\RelativeMarketing\Options\Page' ) ) {
+		add_missing_dependency_error( __('<strong>Newsletter Signup for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/relative-options">Relative options plugin</a> please install or activate it.', 'relative-newsletter') );
+		return;
+	}
+	$page_arguments = [
+		'parent' => 'options-general.php',
+		'page_title' => 'Relative newsletter',
+		'page_description' => 'Please add the relevant information for the newsletter popup',
+		'menu_title' => 'Relative newsletter',
+		'menu_slug' => 'relative-newsletter',
+		'capability' => 'manage_options',
+	];
+
+	$sections = [
+		'sharpspring-settings' => [
+			'title' => 'Sharpspring specific settings',
+			'fields' => [
+				'relative_newsletter_sharpspring_campaign_id' => ['heading' => 'Sharpspring Campaign Id', 'desc' => 'Note: This is the campaign the user will be added to when they are signed up', 'type' => 'input'],
+			]
+		],
+		'initial-popup-copy' => [
+			'title' => 'Initial popup copy',
+			'fields' => [
+				'relative_newsletter_heading'                 => ['heading' => 'Heading', 'type' => 'input'],
+				'relative_newsletter_paragraph'               => ['heading' => 'paragraph', 'type' => 'textarea'],
+			],
+		],
+		'error-copy' => [
+			'title' => 'Error copy',
+			'fields' => [
+				'relative_newsletter_error_heading'           => ['heading' => 'Heading', 'type' => 'input'],
+				'relative_newsletter_error_message'           => ['heading' => 'message', 'type' => 'input'],
+			],
+		],
+		'success-copy' => [
+			'title' => 'Success copy',
+			'fields' => [
+				'relative_newsletter_success_heading'         => ['heading' => 'Heading', 'type' => 'input'],
+				'relative_newsletter_success_message'         => ['heading' => 'message', 'type' => 'input'],
+			],
+		],
+		'image-settings' => [
+			'title' => 'Popup Image',
+			'fields' => [
+				'relative_newsletter_img_x1'                  => ['heading' => 'Image @1x resolution', 'type' => 'input'],
+				'relative_newsletter_img_x2'                  => ['heading' => 'Image @2x resolution', 'type' => 'input'],
+				'relative_newsletter_img_x3'                  => ['heading' => 'Image @3x resolution', 'type' => 'input'],
+				'relative_newsletter_img_alt'                 => ['heading' => 'Image alt', 'type' => 'input'],
+			],
+		],
+		'popup-visibility' => [
+			'title' => 'Popup visibility',
+			'fields' => [
+				'relative_newsletter_popup_delay'             => ['heading' => 'Popup Delay', 'type' => 'input'],
+			],
+		],
+	];
+
+	$settings_page = new \RelativeMarketing\Options\Page($page_arguments, $sections);
+	$settings_page->render();
+}
 add_action( 'admin_init', __NAMESPACE__ . '\\check_sharpspring_endpoints_plugin_active' );
 
 function check_sharpspring_endpoints_plugin_active() {
@@ -34,8 +110,11 @@ function check_sharpspring_endpoints_plugin_active() {
 }
 
 function add_missing_sharpspring_dependency_error() {
+	add_missing_dependency_error( __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring</a> please install or activate it', 'relative-newsletter' ) );
+}
+
+function add_missing_dependency_error( $message ) {
 	$class   = 'notice notice-error';
-	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring please install or activate it</a>', 'relative-newsletter' );
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
 }
@@ -44,7 +123,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\\init_endpoint' );
 
 function init_endpoint() {
 	register_rest_route( 
-		'relativemarketing/v1/newsletter',
+		'relativemarketing/newsletter/v1',
 		'/data',
 		[
 			'methods' => 'GET',
@@ -110,9 +189,3 @@ function handle_get_data() {
 
 	return rest_ensure_response(['campaignId' => $campaign, 'img' => $images, 'notice' => $notices, 'popupDelay' => $popup_delay, 'copy' => $copy]);
 }
-
-/**
- * Add the options page to allow users to setup the plugin
- */
-require plugin_dir_path( __FILE__ ) . 'inc/class-options-page.php';
-Options_Page::get_instance();
