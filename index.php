@@ -39,7 +39,7 @@ function register_settings() {
 	 * try to use it.
 	 */
 	if ( ! class_exists( '\RelativeMarketing\Options\Page' ) ) {
-		add_missing_dependency_error( __('Requires relative options plugin', 'relative-newsletter') );
+		add_missing_dependency_error( __('<strong>Newsletter Signup for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/relative-options">Relative options plugin</a> please install or activate it.', 'relative-newsletter') );
 		return;
 	}
 	$page_arguments = [
