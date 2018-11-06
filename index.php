@@ -123,7 +123,7 @@ add_action( 'rest_api_init', __NAMESPACE__ . '\\init_endpoint' );
 
 function init_endpoint() {
 	register_rest_route( 
-		'relativemarketing/v1/newsletter',
+		'relativemarketing/newsletter/v1',
 		'/data',
 		[
 			'methods' => 'GET',
