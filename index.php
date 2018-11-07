@@ -4,7 +4,7 @@
 *
 * @package     RelativeMarketing\Newsletter
 * @author      Daniel Gregory
-* @copyright   2016 Relative Marketing
+* @copyright   2018 Relative Marketing
 * @license     GPL-2.0+
 *
 * @wordpress-plugin
@@ -35,7 +35,7 @@ function check_sharpspring_endpoints_plugin_active() {
 
 function add_missing_sharpspring_dependency_error() {
 	$class   = 'notice notice-error';
-	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring please install or activate it</a>', 'relative-newsletter' );
+	$message = __( '<strong>Newsletter signup form for Sharpspring</strong> requires <a href="https://github.com/Relative-Marketing/Endpoints-For-Sharpspring/">Endpoints for Sharpspring</a> please install or activate it', 'relative-newsletter' );
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
 }
@@ -60,8 +60,11 @@ add_action( 'wp_footer', __NAMESPACE__ . '\\output_newsletter_holder' );
 
 function output_newsletter_holder() {
 
-	// Currently we only want to show the popup on single posts only
-	if ( ! is_single() ) return;
+	/**
+	 * Currently we only want to show the popup on single posts
+	 * only (excluding single custom post type posts)
+	 */
+	if ( ! is_singular( 'post' ) ) return;
 
 	echo '<div id="relative-newsletter-signup"></div>';
 }
@@ -72,7 +75,7 @@ function output_newsletter_holder() {
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\load_newsletter_scripts' );
 
 function load_newsletter_scripts() {
-	if ( ! is_single() || ! Helpers\has_sharpspring_endpoints_plugin() )
+	if ( ! is_singular( 'post' ) || ! Helpers\has_sharpspring_endpoints_plugin() )
 		return;
 
 	wp_enqueue_script( 'relative-newletter', plugins_url( 'dist/index.js', __FILE__ ), [], filemtime( plugin_dir_path( __FILE__ ) . 'dist/index.js' ), true );
