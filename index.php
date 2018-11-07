@@ -23,13 +23,6 @@ defined('ABSPATH') or die();
 include 'inc/helpers.php';
 use RelativeMarketing\Newsletter\Helpers as Helpers;
 
-/**
- * Add the options page to allow users to setup the plugin
- */
-// include plugin_dir_path( __FILE__ ) . 'inc/class-options-page.php';
-// include plugin_dir_path( __FILE__ ) . 'inc/class-form-generator.php';
-
-
 add_action( 'plugins_loaded', __NAMESPACE__ .'\\register_settings' );
 
 function register_settings() {
@@ -114,6 +107,10 @@ function add_missing_sharpspring_dependency_error() {
 }
 
 function add_missing_dependency_error( $message ) {
+	if ( ! is_admin() ) {
+		return;
+	}
+	
 	$class   = 'notice notice-error';
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
